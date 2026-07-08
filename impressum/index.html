@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>M.Sc. Marco Kleinknecht</title>
+  <title>Impressum – Marco Kleinknecht</title>
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --dark:   #1A1A2E;
+      --darker: #0D1321;
       --accent: #2E86AB;
       --muted:  #8896A5;
       --white:  #FFFFFF;
@@ -20,12 +21,7 @@
       background: var(--dark);
       color: var(--white);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
+      padding: 4rem 2rem;
     }
     .accent-bar {
       position: fixed;
@@ -33,32 +29,101 @@
       height: 3px;
       background: linear-gradient(90deg, var(--accent) 0%, #A23B72 100%);
     }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-size: 2rem;
       font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
       color: var(--white);
     }
-    footer {
-      position: fixed;
-      bottom: 2rem;
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       font-size: 0.75rem;
-      color: var(--muted);
     }
-    footer a {
+    p {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: #B0BEC5;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .back {
+      display: inline-block;
+      margin-top: 3rem;
+      font-size: 0.85rem;
       color: var(--muted);
       text-decoration: none;
     }
-    footer a:hover { color: var(--white); }
+    .back:hover { color: var(--white); }
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 2rem 0;
+    }
   </style>
 </head>
 <body>
   <div class="accent-bar"></div>
-  <h1>Marco<br>Kleinknecht</h1>
-  <footer>
-    <a href="/impressum">Impressum</a>
-  </footer>
+  <div class="container">
+    <h1>Impressum</h1>
+
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p>
+      Marco Kleinknecht<br>
+      Pfalzburgstraße<br>
+      74821 Mosbach<br>
+      Deutschland
+    </p>
+
+    <h2>Kontakt</h2>
+    <p>
+      Telefon: +49 (160) 975 16 885<br>
+      E-Mail: <a href="mailto:marcokleinknecht@web.de">marcokleinknecht@web.de</a>
+    </p>
+
+    <div class="divider"></div>
+
+    <h2>Haftung für Inhalte</h2>
+    <p>
+      Als Privatperson bin ich für die Inhalte dieser Website nach § 7 Abs. 1 TMG
+      verantwortlich. Die Inhalte wurden mit größtmöglicher Sorgfalt erstellt.
+      Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte übernehme
+      ich keine Gewähr.
+    </p>
+
+    <h2>Urheberrecht</h2>
+    <p>
+      Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen
+      Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung bedürfen der
+      schriftlichen Genehmigung des Autors.
+    </p>
+
+    <h2>Datenschutz</h2>
+    <p>
+      Diese Website erhebt und speichert keine personenbezogenen Daten.
+      Es werden keine Cookies gesetzt. Das Hosting erfolgt über GitHub Pages
+      (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA).
+      Die Datenschutzerklärung von GitHub gilt entsprechend:
+      <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement" target="_blank">
+        GitHub Privacy Statement
+      </a>
+    </p>
+
+    <a href="/" class="back">← Zurück zur Startseite</a>
+  </div>
 </body>
 </html>
