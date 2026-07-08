@@ -657,16 +657,30 @@
 </main>
 
 <script>
-  // Scroll reveal
+  // Cards and timeline items start hidden for stagger
+  document.querySelectorAll('.card, .tl-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  });
+
+  // Scroll reveal with stagger for children
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
+        const children = e.target.querySelectorAll('.card, .tl-item');
+        children.forEach((child, i) => {
+          setTimeout(() => {
+            child.style.opacity = '1';
+            child.style.transform = 'translateY(0)';
+          }, i * 130);
+        });
         observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.08 });
   reveals.forEach(r => observer.observe(r));
 
   // Parallax blobs
