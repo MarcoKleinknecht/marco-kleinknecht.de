@@ -113,15 +113,28 @@
     }
 
     .hero-photo {
-      width: clamp(100px, 25vw, 150px);
-      height: clamp(100px, 25vw, 150px);
-      border-radius: 50%;
+      width: clamp(160px, 40vw, 280px);
+      height: clamp(200px, 50vw, 340px);
+      border-radius: 16px;
       object-fit: cover;
       object-position: center top;
       border: 2px solid rgba(46,134,171,0.4);
       margin-bottom: 2.5rem;
       opacity: 0;
       animation: fadeIn 0.8s ease 0.6s forwards;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .footer-links-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
     }
 
     .btn-group {
@@ -153,10 +166,8 @@
     .btn-primary:hover { background: #236d8a; transform: translateY(-2px); }
 
     .scroll-hint {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
+      position: relative;
+      margin-top: 3rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -498,7 +509,6 @@
 
 <!-- HERO -->
 <section class="hero">
-  <p class="hero-eyebrow">marco-kleinknecht.de</p>
   <h1 class="hero-hook">You scanned.<br><em>Let's make it worth it.</em></h1>
   <img src="../photo.jpg" alt="Marco Kleinknecht" class="hero-photo">
   <p class="hero-name">Marco Kleinknecht</p>
@@ -514,7 +524,7 @@
   </div>
 </section>
 
-<div class="divider"></div>
+
 
 <!-- WHO I AM -->
 <section class="section reveal">
@@ -533,21 +543,21 @@
 <div class="section reveal" style="padding-top: 0;">
   <div class="stats">
     <div class="stat">
-      <div class="stat-num">5</div>
-      <div class="stat-label">Jahre<br>Mercedes-Benz</div>
+      <div class="stat-num">&gt;8</div>
+      <div class="stat-label">Jahre<br>Automotive-Industrie</div>
     </div>
     <div class="stat">
-      <div class="stat-num">1,2</div>
-      <div class="stat-label">Master<br>Mechatronik</div>
+      <div class="stat-num">Note 1,2</div>
+      <div class="stat-label">Master of Science<br>Mechatronik</div>
     </div>
     <div class="stat">
-      <div class="stat-num">×4</div>
-      <div class="stat-label">Thermische<br>Wiederholbarkeit</div>
+      <div class="stat-num">4×</div>
+      <div class="stat-label">thermische Wiederholbarkeit<br>Leistungselektronik</div>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
+
 
 <!-- EXPERTISE -->
 <section class="section reveal">
@@ -578,7 +588,7 @@
   </div>
 </section>
 
-<div class="divider"></div>
+
 
 <!-- TIMELINE -->
 <section class="section reveal">
@@ -624,7 +634,7 @@
   </div>
 </section>
 
-<div class="divider"></div>
+
 
 <!-- CONTACT -->
 <section class="footer-section reveal">
@@ -634,22 +644,24 @@
     ob zu einer konkreten Position oder einem ersten Kennenlernen.
   </p>
   <div class="footer-links">
-    <a href="mailto:marcokleinknecht@web.de" class="footer-link">
-      <span class="footer-icon">✉</span>
-      marcokleinknecht@web.de
-    </a>
-    <a href="tel:+4916097516885" class="footer-link">
-      <span class="footer-icon">📞</span>
-      +49 (160) 975 16 885
-    </a>
-    <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" class="footer-link" target="_blank">
-      <span class="footer-icon">in</span>
-      LinkedIn
-    </a>
-    <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="footer-link">
-      <span class="footer-icon">⬇</span>
-      Lebenslauf herunterladen · Download CV
-    </a>
+    <div class="footer-links-inner">
+      <a href="mailto:marcokleinknecht@web.de" class="footer-link">
+        <span class="footer-icon">✉</span>
+        marcokleinknecht@web.de
+      </a>
+      <a href="tel:+4916097516885" class="footer-link">
+        <span class="footer-icon">📞</span>
+        +49 (160) 975 16 885
+      </a>
+      <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" class="footer-link" target="_blank">
+        <span class="footer-icon">in</span>
+        LinkedIn
+      </a>
+      <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="footer-link">
+        <span class="footer-icon">⬇</span>
+        Lebenslauf herunterladen · Download CV
+      </a>
+    </div>
   </div>
   <p class="imprint"><a href="../impressum">Impressum</a></p>
 </section>
@@ -657,27 +669,31 @@
 </main>
 
 <script>
-  // Cards and timeline items start hidden for stagger
+  // Init staggered children as hidden
   document.querySelectorAll('.card, .tl-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(24px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
   });
 
-  // Scroll reveal with stagger for children
+  // Repeating scroll reveal – triggers every time in both directions
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
-        const children = e.target.querySelectorAll('.card, .tl-item');
-        children.forEach((child, i) => {
+        e.target.querySelectorAll('.card, .tl-item').forEach((child, i) => {
           setTimeout(() => {
             child.style.opacity = '1';
             child.style.transform = 'translateY(0)';
           }, i * 130);
         });
-        observer.unobserve(e.target);
+      } else {
+        e.target.classList.remove('visible');
+        e.target.querySelectorAll('.card, .tl-item').forEach(el => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(24px)';
+        });
       }
     });
   }, { threshold: 0.08 });
