@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>M.Sc. Marco Kleinknecht</title>
-  <meta name="description" content="Marco Kleinknecht – Entwicklungsingenieur, Antriebe & Embedded Systems">
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --dark:    #1A1A2E;
-      --darker:  #0D1321;
+      --dark:    #0E0F1A;
+      --panel:   #13141F;
       --accent:  #2E86AB;
       --accent2: #A23B72;
-      --light:   #F0F4F8;
-      --muted:   #8896A5;
       --white:   #FFFFFF;
+      --muted:   #7A8499;
+      --subtle:  rgba(255,255,255,0.05);
     }
 
     html { scroll-behavior: smooth; }
@@ -27,532 +26,658 @@
       font-family: 'Inter', sans-serif;
       background: var(--dark);
       color: var(--white);
-      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* ── ACCENT BAR ── */
-    .accent-bar {
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      z-index: 100;
     }
 
     /* ── HERO ── */
     .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      gap: 4rem;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-text { padding: 4rem 0; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(46,134,171,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(162,59,114,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
 
-    .eyebrow {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+    .hero-eyebrow {
+      font-size: 0.7rem;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .hero-hook {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.25s forwards;
+    }
+
+    .hero-hook em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 700;
-      line-height: 1.05;
-      color: var(--white);
-      margin-bottom: 0.5rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.4s forwards;
     }
 
     .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      font-weight: 500;
+      font-size: clamp(0.85rem, 2vw, 1rem);
       color: var(--accent);
-      margin-bottom: 2rem;
+      font-weight: 500;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.5s forwards;
     }
 
-    .hero-bio {
-      font-size: 1rem;
-      line-height: 1.75;
-      color: #B0BEC5;
-      margin-bottom: 1.25rem;
-      max-width: 480px;
-    }
-
-    .hero-bio-en {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 480px;
-      border-left: 2px solid var(--accent);
-      padding-left: 1rem;
+    .hero-photo {
+      width: clamp(100px, 25vw, 150px);
+      height: clamp(100px, 25vw, 150px);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid rgba(46,134,171,0.4);
       margin-bottom: 2.5rem;
-      font-style: italic;
+      opacity: 0;
+      animation: fadeIn 0.8s ease 0.6s forwards;
     }
 
-    .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.7s forwards;
+    }
 
     .btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
       font-size: 0.875rem;
-      font-weight: 600;
+      font-weight: 500;
       text-decoration: none;
-      letter-spacing: 0.03em;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .btn-primary {
       background: var(--accent);
       color: var(--white);
     }
-    .btn-primary:hover { background: #236d8a; transform: translateY(-1px); }
+    .btn-primary:hover { background: #236d8a; transform: translateY(-2px); }
 
-    .btn-outline {
-      border: 1.5px solid var(--muted);
-      color: var(--muted);
-    }
-    .btn-outline:hover { border-color: var(--white); color: var(--white); }
-
-    /* ── PHOTO SIDE ── */
-    .hero-photo {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .photo-frame {
-      position: relative;
-      width: 340px;
-      height: 400px;
-    }
-
-    .photo-frame::before {
-      content: '';
+    .scroll-hint {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      right: -16px;
-      bottom: -16px;
-      border: 2px solid var(--accent);
-      border-radius: 6px;
-      z-index: 0;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
     }
-
-    .photo-frame img {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      border-radius: 6px;
-      filter: grayscale(15%);
-    }
-
-    /* ── FACTS STRIP ── */
-    .facts {
-      background: var(--darker);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .facts-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      text-align: center;
-    }
-
-    .fact-number {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .fact-label {
-      font-size: 0.8rem;
-      color: var(--muted);
+    .scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      line-height: 1.4;
+      color: var(--muted);
+    }
+    .scroll-dot {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
     }
 
-    /* ── EXPERTISE ── */
-    .expertise {
-      max-width: 1100px;
+    /* ── SECTIONS ── */
+    .section {
+      padding: 5rem 1.5rem;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 5rem 2rem;
     }
 
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SECTION LABEL ── */
     .section-label {
-      font-size: 0.7rem;
-      font-weight: 600;
+      font-size: 0.65rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
     }
 
-    .expertise-grid {
+    /* ── STATEMENT ── */
+    .statement {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.25rem;
+    }
+
+    .body-text {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #B0BEC5;
+    }
+
+    /* ── STATS ROW ── */
+    .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 3rem 0;
     }
 
-    .expertise-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 6px;
-      padding: 1.75rem;
-      transition: border-color 0.2s;
+    .stat {
+      background: var(--panel);
+      padding: 1.75rem 1rem;
+      text-align: center;
     }
-    .expertise-card:hover { border-color: var(--accent); }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+    }
+
+    /* ── EXPERTISE CARDS ── */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--subtle);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateX(4px); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
 
     .card-icon {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: rgba(46,134,171,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
     }
 
     .card-title {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-size: 1rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.5rem;
+      font-weight: 700;
     }
 
     .card-body {
       font-size: 0.85rem;
-      line-height: 1.65;
+      line-height: 1.7;
       color: var(--muted);
     }
 
     /* ── TIMELINE ── */
-    .timeline-section {
-      background: var(--darker);
-      border-top: 1px solid rgba(255,255,255,0.06);
+    .timeline {
+      margin-top: 2rem;
+      position: relative;
     }
 
-    .timeline-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 5rem 2rem;
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 0;
+      width: 1px;
+      background: rgba(255,255,255,0.08);
     }
-
-    .timeline { margin-top: 0; }
 
     .tl-item {
-      display: grid;
-      grid-template-columns: 140px 1px 1fr;
-      gap: 0 2rem;
-      margin-bottom: 2.5rem;
+      padding-left: 2rem;
+      padding-bottom: 2.5rem;
+      position: relative;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--dark);
     }
 
     .tl-year {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-align: right;
-      padding-top: 0.2rem;
-    }
-
-    .tl-line {
-      background: rgba(255,255,255,0.1);
-      position: relative;
-    }
-    .tl-line::before {
-      content: '';
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .tl-content { padding-top: 0; }
-
-    .tl-role {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--white);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       margin-bottom: 0.25rem;
     }
 
+    .tl-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
     .tl-company {
-      font-size: 0.85rem;
-      color: var(--accent);
+      font-size: 0.8rem;
+      color: var(--muted);
       margin-bottom: 0.5rem;
     }
 
     .tl-desc {
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: #7A8499;
     }
 
-    /* ── CONTACT ── */
-    .contact-section {
-      max-width: 1100px;
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      max-width: 720px;
       margin: 0 auto;
-      padding: 5rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
     }
 
-    .contact-text h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+    /* ── FOOTER ── */
+    .footer-section {
+      padding: 4rem 1.5rem 5rem;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
     }
 
-    .contact-text p {
-      font-size: 0.95rem;
-      line-height: 1.75;
-      color: #B0BEC5;
+    .footer-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
       margin-bottom: 2rem;
+      line-height: 1.6;
     }
 
-    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 3rem;
+    }
 
-    .contact-link {
+    .footer-link {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      font-size: 0.9rem;
+      gap: 0.6rem;
+      font-size: 0.875rem;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .contact-link:hover { color: var(--white); }
+    .footer-link:hover { color: var(--white); }
 
-    .contact-link-icon {
-      width: 36px;
-      height: 36px;
-      background: rgba(255,255,255,0.05);
+    .footer-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--subtle);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.875rem;
     }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--darker);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.75rem;
+    .imprint {
+      font-size: 0.7rem;
       color: var(--muted);
+      opacity: 0.6;
+    }
+    .imprint a { color: inherit; text-decoration: none; }
+    .imprint a:hover { color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding: 3rem 1.5rem;
-        gap: 3rem;
-        min-height: auto;
-      }
-      .hero-photo { order: -1; }
-      .photo-frame { width: 240px; height: 280px; }
-      .facts-inner { grid-template-columns: 1fr; gap: 1.5rem; }
-      .expertise-grid { grid-template-columns: 1fr; }
-      .contact-section { grid-template-columns: 1fr; }
-      .tl-item { grid-template-columns: 80px 1px 1fr; gap: 0 1rem; }
+    /* ── PARALLAX LAYER ── */
+    .parallax-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .parallax-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.07;
+    }
+
+    .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--accent);
+      top: -200px;
+      right: -200px;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--accent2);
+      bottom: 20%;
+      left: -150px;
+    }
+
+    main { position: relative; z-index: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
 <body>
 
-<div class="accent-bar"></div>
+<div class="topbar"></div>
+
+<div class="parallax-bg">
+  <div class="parallax-blob blob-1" id="blob1"></div>
+  <div class="parallax-blob blob-2" id="blob2"></div>
+</div>
+
+<main>
 
 <!-- HERO -->
-<section>
-  <div class="hero">
-    <div class="hero-text">
-      <p class="eyebrow">Entwicklungsingenieur · Engineer</p>
-      <h1 class="hero-name">Marco<br>Kleinknecht</h1>
-      <p class="hero-title">Antriebe & Embedded Systems</p>
-      <p class="hero-bio">
-        Fünf Jahre Funktionsentwicklung bei der Mercedes-Benz AG – von der Anforderung
-        bis zur Fahrzeuginbetriebnahme. Schwerpunkt: thermisches Management elektrischer
-        Antriebe, Embedded Software und Systemintegration.
-      </p>
-      <p class="hero-bio-en">
-        Five years of function development at Mercedes-Benz AG – from requirements
-        to vehicle commissioning. Focus: thermal management of electric drives,
-        embedded software, and system integration.
-      </p>
-      <div class="cta-group">
-        <a href="tel:+4916097516885" class="btn btn-primary">Anrufen</a>
-        <a href="mailto:marcokleinknecht@web.de" class="btn btn-primary">E-Mail</a>
-      </div>
-    </div>
-
-    <div class="hero-photo">
-      <div class="photo-frame">
-        <img src="../photo.jpg" alt="Marco Kleinknecht">
-      </div>
-    </div>
+<section class="hero">
+  <p class="hero-eyebrow">marco-kleinknecht.de</p>
+  <h1 class="hero-hook">You scanned.<br><em>Let's make it worth it.</em></h1>
+  <img src="../photo.jpg" alt="Marco Kleinknecht" class="hero-photo">
+  <p class="hero-name">Marco Kleinknecht</p>
+  <p class="hero-title">M.Sc. Mechatronik · Antriebe & Embedded Systems</p>
+  <div class="btn-group">
+    <a href="tel:+4916097516885" class="btn btn-primary">Anrufen</a>
+    <a href="mailto:marcokleinknecht@web.de" class="btn btn-primary">E-Mail</a>
+    <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="btn btn-primary">CV</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
   </div>
 </section>
 
-<!-- FACTS -->
-<div class="facts">
-  <div class="facts-inner">
-    <div>
-      <div class="fact-number">5</div>
-      <div class="fact-label">Jahre<br>Mercedes-Benz AG</div>
+<div class="divider"></div>
+
+<!-- WHO I AM -->
+<section class="section reveal">
+  <p class="section-label">Wer ich bin · Who I am</p>
+  <h2 class="statement">Ich denke in Systemen.<br>Ich baue, was ich denke.</h2>
+  <p class="body-text">
+    Fünf Jahre Funktionsentwicklung bei der Mercedes-Benz AG haben mir eines klar gemacht:
+    Die spannendste Herausforderung ist nicht, eine Funktion zum Laufen zu bringen –
+    sondern sicherzustellen, dass ein Gesamtsystem dauerhaft den Anforderungen seiner
+    Nutzer gerecht wird. Ich kombiniere physikalisches Systemverständnis mit
+    Embedded Software-Expertise und dem Antrieb, Dinge wirklich fertig zu machen.
+  </p>
+</section>
+
+<!-- STATS -->
+<div class="section reveal" style="padding-top: 0;">
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Jahre<br>Mercedes-Benz</div>
     </div>
-    <div>
-      <div class="fact-number">M.Sc.</div>
-      <div class="fact-label">Mechatronik<br>Note 1,2</div>
+    <div class="stat">
+      <div class="stat-num">1,2</div>
+      <div class="stat-label">Master<br>Mechatronik</div>
     </div>
-    <div>
-      <div class="fact-number">×4</div>
-      <div class="fact-label">Verbesserung<br>thermische Wiederholbarkeit</div>
+    <div class="stat">
+      <div class="stat-num">×4</div>
+      <div class="stat-label">Thermische<br>Wiederholbarkeit</div>
     </div>
   </div>
 </div>
+
+<div class="divider"></div>
 
 <!-- EXPERTISE -->
-<section class="expertise">
+<section class="section reveal">
   <p class="section-label">Fachgebiete · Expertise</p>
-  <div class="expertise-grid">
-    <div class="expertise-card">
-      <div class="card-icon">⚡</div>
-      <div class="card-title">Thermisches Management</div>
-      <div class="card-body">Echtzeitfähige Überwachung und Regelung thermischer Systeme in elektrischen Traktionsantrieben. Physikalische Modellierung, Prüfstandsvalidierung, Serienabsicherung.</div>
+  <h2 class="statement">Was ich wirklich kann.</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Thermisches Management</div>
+      </div>
+      <p class="card-body">Echtzeitfähige Überwachung und Regelung thermischer Systeme in elektrischen Traktionsantrieben. Physikalische Modellierung, Prüfstandsvalidierung, Serienabsicherung. Faktor-4-Verbesserung der thermischen Wiederholbarkeit bei Mercedes-Benz.</p>
     </div>
-    <div class="expertise-card">
-      <div class="card-icon">💻</div>
-      <div class="card-title">Embedded Software</div>
-      <div class="card-body">Funktionsentwicklung nach V-Modell in AUTOSAR Classic. Implementierung in C/C++, modellbasierte Entwicklung in Simulink/Targetlink, Python-Frameworks zur Automatisierung.</div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">💻</div>
+        <div class="card-title">Embedded Software</div>
+      </div>
+      <p class="card-body">Funktionsentwicklung nach V-Modell in AUTOSAR Classic. Implementierung in C/C++, modellbasierte Entwicklung in Simulink/Targetlink. Python-Framework zur automatisierten Anforderungsverifikation – heute produktiv im Einsatz.</p>
     </div>
-    <div class="expertise-card">
-      <div class="card-icon">🔧</div>
-      <div class="card-title">Systems Engineering</div>
-      <div class="card-body">Anforderungsmanagement, Lastenheft-Koordination, Lieferantensteuerung und Design-Reviews in interdisziplinären Entwicklungsprojekten nach ISO 26262.</div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">🔧</div>
+        <div class="card-title">Systems Engineering</div>
+      </div>
+      <p class="card-body">Anforderungsmanagement, leitende Lastenheft-Koordination, Lieferantensteuerung und Design-Reviews. Leitende Koordination der unternehmensweiten Einführung eines zentralisierten Lastenhefts als Blaupause für alle künftigen Antriebsprojekte.</p>
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
 
 <!-- TIMELINE -->
-<div class="timeline-section">
-  <div class="timeline-inner">
-    <p class="section-label">Werdegang · Career</p>
-    <div class="timeline">
+<section class="section reveal">
+  <p class="section-label">Werdegang · Career</p>
+  <h2 class="statement">Woher ich komme.</h2>
+  <div class="timeline">
 
-      <div class="tl-item">
-        <div class="tl-year">2021–2026</div>
-        <div class="tl-line"></div>
-        <div class="tl-content">
-          <div class="tl-role">Entwicklungsingenieur</div>
-          <div class="tl-company">Mercedes-Benz AG · Sindelfingen</div>
-          <div class="tl-desc">Funktionsentwicklung elektrische Traktionsantriebe. Thermisches Management, Bauteilschutz, Inbetriebnahme. Leitende Koordination zentralisiertes Lastenheft.</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-year">2021</div>
-        <div class="tl-line"></div>
-        <div class="tl-content">
-          <div class="tl-role">Entwicklungsingenieur</div>
-          <div class="tl-company">MAN Truck & Bus SE · München</div>
-          <div class="tl-desc">Bremsregelsysteme, funktionale Sicherheit nach ISO 26262, ASPICE.</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-year">2020–2021</div>
-        <div class="tl-line"></div>
-        <div class="tl-content">
-          <div class="tl-role">Praktische Tätigkeit zur Überbrückung</div>
-          <div class="tl-company">WiRu Elektrotechnik · Region Ludwigsburg</div>
-          <div class="tl-desc">Installation und Inbetriebnahme von PV-Anlagen und Heimspeichersystemen. Elektroinstallation.</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-year">2017–2019</div>
-        <div class="tl-line"></div>
-        <div class="tl-content">
-          <div class="tl-role">PreMaster & Master of Science</div>
-          <div class="tl-company">Robert Bosch GmbH · Hochschule Reutlingen</div>
-          <div class="tl-desc">PreMaster Traktionsantriebe. Master Mechatronik, Note 1,2. Thesis: SVPWM für Traktionsantriebe.</div>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-year">2013–2017</div>
-        <div class="tl-line"></div>
-        <div class="tl-content">
-          <div class="tl-role">Bachelor of Science</div>
-          <div class="tl-company">Reinhold-Würth-Hochschule · Künzelsau</div>
-          <div class="tl-desc">Antriebssysteme und Mechatronik, Note 1,7.</div>
-        </div>
-      </div>
-
+    <div class="tl-item">
+      <div class="tl-year">2021 – 2026</div>
+      <div class="tl-role">Entwicklungsingenieur</div>
+      <div class="tl-company">Mercedes-Benz AG · Sindelfingen</div>
+      <div class="tl-desc">Funktionsentwicklung elektrische Traktionsantriebe. Thermisches Management, Bauteilschutz, Inbetriebnahme. Leitende Koordination zentralisiertes Lastenheft.</div>
     </div>
-  </div>
-</div>
 
-<!-- CONTACT -->
-<section>
-  <div class="contact-section">
-    <div class="contact-text">
-      <h2>Lassen Sie uns sprechen.</h2>
-      <p>Ich freue mich auf den Austausch – ob zu einer konkreten Position oder einem ersten Kennenlernen.</p>
-      <p><em>I look forward to connecting – whether about a specific role or an initial conversation.</em></p>
+    <div class="tl-item">
+      <div class="tl-year">2021</div>
+      <div class="tl-role">Entwicklungsingenieur</div>
+      <div class="tl-company">MAN Truck & Bus SE · München</div>
+      <div class="tl-desc">Bremsregelsysteme, funktionale Sicherheit nach ISO 26262, ASPICE.</div>
     </div>
-    <div class="contact-links">
-      <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="contact-link">
-        <span class="contact-link-icon">⬇</span>
-        Lebenslauf herunterladen · Download CV
-      </a>
-      <a href="mailto:marcokleinknecht@web.de" class="contact-link">
-        <span class="contact-link-icon">✉</span>
-        marcokleinknecht@web.de
-      </a>
-      <a href="tel:+4916097516885" class="contact-link">
-        <span class="contact-link-icon">📞</span>
-        +49 (160) 975 16 885
-      </a>
-      <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" class="contact-link" target="_blank">
-        <span class="contact-link-icon">in</span>
-        LinkedIn
-      </a>
+
+    <div class="tl-item">
+      <div class="tl-year">2020 – 2021</div>
+      <div class="tl-role">Praktische Tätigkeit zur Überbrückung</div>
+      <div class="tl-company">WiRu Elektrotechnik · Region Ludwigsburg</div>
+      <div class="tl-desc">Installation und Inbetriebnahme von PV-Anlagen und Heimspeichersystemen. Elektroinstallation.</div>
     </div>
+
+    <div class="tl-item">
+      <div class="tl-year">2017 – 2019</div>
+      <div class="tl-role">PreMaster & Master of Science</div>
+      <div class="tl-company">Robert Bosch GmbH · Hochschule Reutlingen</div>
+      <div class="tl-desc">PreMaster Traktionsantriebe. Master Mechatronik, Note 1,2. Thesis: SVPWM für Traktionsantriebe.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">2013 – 2017</div>
+      <div class="tl-role">Bachelor of Science</div>
+      <div class="tl-company">Reinhold-Würth-Hochschule · Künzelsau</div>
+      <div class="tl-desc">Antriebssysteme und Mechatronik, Note 1,7.</div>
+    </div>
+
   </div>
 </section>
 
-<footer>
-  <p>© 2026 Marco Kleinknecht · <a href="/impressum" style="color: var(--muted);">Impressum</a></p>
-</footer>
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="footer-section reveal">
+  <h2 class="footer-title">Lassen Sie uns sprechen.</h2>
+  <p class="footer-sub">
+    Ich freue mich auf den Austausch –<br>
+    ob zu einer konkreten Position oder einem ersten Kennenlernen.
+  </p>
+  <div class="footer-links">
+    <a href="mailto:marcokleinknecht@web.de" class="footer-link">
+      <span class="footer-icon">✉</span>
+      marcokleinknecht@web.de
+    </a>
+    <a href="tel:+4916097516885" class="footer-link">
+      <span class="footer-icon">📞</span>
+      +49 (160) 975 16 885
+    </a>
+    <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" class="footer-link" target="_blank">
+      <span class="footer-icon">in</span>
+      LinkedIn
+    </a>
+    <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="footer-link">
+      <span class="footer-icon">⬇</span>
+      Lebenslauf herunterladen · Download CV
+    </a>
+  </div>
+  <p class="imprint"><a href="../impressum">Impressum</a></p>
+</section>
+
+</main>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Parallax blobs
+  const blob1 = document.getElementById('blob1');
+  const blob2 = document.getElementById('blob2');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    blob1.style.transform = `translateY(${y * 0.15}px)`;
+    blob2.style.transform = `translateY(${y * -0.1}px)`;
+  }, { passive: true });
+</script>
 
 </body>
 </html>
