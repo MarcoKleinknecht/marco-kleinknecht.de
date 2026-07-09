@@ -151,20 +151,38 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      padding: 0.7rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
       font-weight: 500;
       text-decoration: none;
       transition: all 0.2s ease;
       white-space: nowrap;
+      letter-spacing: 0.01em;
     }
 
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), #1a6b8a);
       color: var(--white);
+      border: none;
+      box-shadow: 0 4px 15px rgba(46,134,171,0.3);
     }
-    .btn-primary:hover { background: #236d8a; transform: translateY(-2px); }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46,134,171,0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(4px);
+    }
+    .btn-outline:hover {
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-2px);
+    }
 
     .scroll-hint {
       position: relative;
@@ -540,9 +558,9 @@
   <p class="hero-title">M.Sc. Mechatronik · Antriebe & Embedded Systems</p>
   <div class="btn-group">
     <a href="tel:+4916097516885" class="btn btn-primary">Anrufen</a>
-    <a href="mailto:marcokleinknecht@web.de" class="btn btn-primary">E-Mail</a>
+    <a href="mailto:marcokleinknecht@web.de" class="btn btn-primary">Mail</a>
     <a href="../Lebenslauf_MarcoKleinknecht.pdf" download class="btn btn-primary">CV</a>
-    <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" target="_blank" class="btn btn-primary">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/marco-kleinknecht-131a53190" target="_blank" class="btn btn-primary">In</a>
   </div>
   <div class="scroll-hint">
     <span>Scroll</span>
